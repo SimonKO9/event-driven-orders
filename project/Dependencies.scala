@@ -20,4 +20,11 @@ object Dependencies {
     "org.specs2" %% "specs2-core" % "3.8.4" % "test"
   )
 
+  val kafkaDeps = Seq(
+    "org.apache.kafka" % "kafka_2.11" % "0.10.0.0"
+  )
+
+  val jsonDeps = Seq(
+    "com.owlike" % "genson-scala_2.11" % "1.4"
+  )
 }

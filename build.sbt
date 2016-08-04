@@ -1,6 +1,8 @@
+organization := "com.github.simonthecat"
+
 name := "event-driven-orders"
 
-version := "1.0"
+version := "1.0.0"
 
 scalaVersion := "2.11.8"
 
@@ -24,13 +26,40 @@ javaOptions += "-Xmx4G"
 
 import Dependencies._
 
-lazy val orderService = project.in(file("order-service")).settings(
-  libraryDependencies ++= (akkaDeps ++ sprayDeps ++ testDeps)
+resolvers += Resolver.bintrayRepo("cakesolutions", "maven")
+
+val commonSettings = Seq(
+  resolvers += Resolver.bintrayRepo("cakesolutions", "maven"),
+  scalaVersion := "2.11.8"
 )
 
-lazy val productService = project.in(file("product-service")).settings(
-  libraryDependencies ++= (akkaDeps ++ sprayDeps ++ testDeps)
+lazy val common = project.in(file("common"))
+    .settings(
+      libraryDependencies ++= (jsonDeps)
+    )
+  .settings(commonSettings)
+
+lazy val orderService = project.in(file("order-service"))
+  .dependsOn(common)
+  .settings(
+    commonSettings,
+    libraryDependencies ++= (kafkaDeps ++ testDeps)
 )
+
+lazy val productService = project.in(file("product-service"))
+  .dependsOn(common)
+  .settings(
+    commonSettings,
+    libraryDependencies ++= (kafkaDeps ++ testDeps)
+)
+
+lazy val clientApi = project.in(file("client-api"))
+  .dependsOn(common)
+  .settings(
+    commonSettings,
+    libraryDependencies ++= (akkaDeps ++ sprayDeps ++ kafkaDeps ++ testDeps)
+  )
 
 lazy val root = project.in(file("."))
-  .aggregate(orderService, productService)
+  .settings(commonSettings)
+  .aggregate(orderService, productService, clientApi)
