@@ -8,7 +8,8 @@ object Dependencies {
   val sprayDeps = Seq(
     "io.spray" %% "spray-can" % sprayV,
     "io.spray" %% "spray-routing" % sprayV,
-    "io.spray" %% "spray-testkit" % sprayV % "test"
+    "io.spray" %% "spray-testkit" % sprayV % "test",
+    "io.spray" %%  "spray-json" % "1.3.2"
   )
 
   val akkaDeps = Seq(
